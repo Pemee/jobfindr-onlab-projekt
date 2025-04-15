@@ -1,0 +1,10 @@
+.main-container{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+}
+.map-container{
+    height: 500px;
+    width: 500px;
+}
