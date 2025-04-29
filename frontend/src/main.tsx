@@ -9,6 +9,7 @@ import Registration from './auth/Registration.tsx';
 import Login from './auth/Login.tsx';
 import Quiz from './pages/Quiz.tsx';
 import PostCreation from './pages/PostCreation.tsx';
+import Applications from './pages/Applications.tsx';
 
 
 const router = createBrowserRouter([
@@ -38,8 +39,12 @@ const router = createBrowserRouter([
         element: <Login/>,
     },
     {
-        path: '/quiz/:id',
+        path: '/application/:id',
         element: <Quiz/>,
+    },
+    {
+        path: '/applications',
+        element: <Applications/>,
     },
   ]);
 render(<RouterProvider router={router} />, document.getElementById('app')!)

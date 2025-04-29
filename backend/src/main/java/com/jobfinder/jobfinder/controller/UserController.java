@@ -57,8 +57,14 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong!");
     }
-    @GetMapping("/user/{username}")
+    @GetMapping("/user/username/{username}")
     public User getUserByUsername(@PathVariable String username){
         return userService.getUserByUsername(username);
     }
+
+    @GetMapping("/user/{id}")
+    public User getUserById(@PathVariable Long id){
+        return userService.getUserById(id);
+    }
+
 }

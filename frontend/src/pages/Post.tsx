@@ -11,7 +11,7 @@ export default function Post(){
     const post = location.state?.post;
     const navigate = useNavigate();
     const handleApplyClick = (id: number, postData: PostType) => {
-        navigate(`/quiz/${id}`, { state: { post: postData } });
+        navigate(`/application/${id}`, { state: { post: postData } });
     };
     function formatID(id: number): string {
       return id.toString().padStart(3, "0");
@@ -36,11 +36,11 @@ export default function Post(){
         <LanguageIcon/>
         <Typography sx={{ color: 'text.secondary', mb: 1.5, pl: 1}}>{post.country}</Typography>
         </div>
-        <Typography variant="body1">{post.details}</Typography>
+        <Typography variant="body1" style={{ whiteSpace: 'pre-line' }}>{post.details}</Typography>
       </CardContent>
       <CardActions>
       <Button size="medium" onClick={openPdf}>Learn Material</Button>
-        <Button size="medium" onClick={()=>{handleApplyClick(post.id, { id: post.id, title: post.title, description: post.description, country:post.country, company_name: post.company, details:post.details})}}>Apply</Button>
+        <Button size="medium" onClick={()=>{handleApplyClick(post.id, { id: post.id, title: post.title, description: post.description, country:post.country, company_name: post.company_name, details:post.details})}}>Apply</Button>
       </CardActions>
     </Card>
     </div>

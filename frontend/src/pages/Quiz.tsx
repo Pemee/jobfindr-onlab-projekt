@@ -9,20 +9,34 @@ import {
     Button
   } from "@mui/material";
   import { useEffect, useState } from "preact/hooks";
-  import { useLocation } from "react-router-dom";
+  import { useLocation, useNavigate } from "react-router-dom";
   
   type AnswerSet = [string, string, string, string];
+  
   interface ResponseFormat {
     questions: string[];
     answers: AnswerSet[];
   }
+  interface User{
+      user_id:number,
+      firstname:string,
+      lastname:string,
+      username: string,
+      email: string,
+      password: string,
+      confirmPassword: string,
+      role: string
+  }
   
   export default function Quiz() {
     const location = useLocation();
+    const navigate = useNavigate();
     const post_id = location.state?.post.id;
+    const company_name = location.state?.post.company_name;
   
     const [isLoading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const [score, SetScore] = useState(0);
     const [questions, setQuestions] = useState<string[]>([]);
     const [answers, setAnswers] = useState<AnswerSet[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<string[]>([]);
@@ -67,7 +81,52 @@ import {
         setError("An error occurred. Please retry.");
       }
     }
-  
+
+    async function getUserByUsername(username:string | null):Promise<User | undefined>{
+      try{
+        const response = await fetch(`http://localhost:8081/user/username/${username}`)
+
+        if(response.status === 200){
+          return response.json();
+        } 
+        return undefined;
+      } catch (error) {
+      setError("An error occurred. Please retry.");
+    }
+    }
+    async function postApplication(){
+      const username = localStorage.getItem("username");
+      const user = await getUserByUsername(username);
+      console.log(company_name);
+      if(user?.user_id === undefined){
+        return;
+      }
+      const formData = {
+        post_id: post_id,
+        applier_id: user.user_id,
+        companyName: company_name,
+        score: score
+      }
+      setError('')
+        try {
+            const response = await fetch("http://localhost:8081/application/addApplication", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+              });
+
+            if(response.status === 201) {
+                alert("Application submitted!");
+            } else {
+                const errorText = await response.text();
+                setError(errorText)
+            }
+        } catch(err) {
+            setError('An error occured during sumbitting')
+        }
+    }
     useEffect(() => {
         async function fetchQuestions() {
           const result:ResponseFormat|undefined = await generateQuestions();
@@ -95,8 +154,10 @@ import {
       if (correctAnswers.length === 0) return;
   
       const points = countPoints(selectedAnswers,correctAnswers);
-  
+      SetScore(points),
       console.log(points);
+      postApplication();
+      navigate("/");
     };
   
     return (

@@ -31,7 +31,7 @@ export function ResponsiveAppBar() {
   }
   async function getUser(): Promise<User | undefined> {
     try {
-        const response = await fetch(`http://localhost:8081/user/${username}`);
+        const response = await fetch(`http://localhost:8081/user/username/${username}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -72,6 +72,7 @@ export function ResponsiveAppBar() {
       setUser(result);
     };
     fetchUser();
+    console.log(user?.role)
     }
     
     }, [username]);
@@ -105,7 +106,11 @@ export function ResponsiveAppBar() {
               localStorage.getItem('isAuthenticated') === 'true' ?
               <div class="appbar-container">
                 {
-                  user?.role === "COMPANY" ? <Link to="/post-creation" style={{ textDecoration: 'none'}}><div class="sign-in">Create Post</div></Link>:
+                  user?.role === "COMPANY" ? <div style={{display:"flex"}}>
+                    <Link to="/post-creation" style={{ textDecoration: 'none'}}><div class="sign-in">Create Post</div></Link>
+                    <Link to="/applications" style={{ textDecoration: 'none'}}><div class="sign-in">Applications</div></Link>
+                  </div>
+                  :
                   <div></div>
                 }
                 <Link to="/profile" style={{ textDecoration: 'none'}}><div class="sign-in">Profile</div></Link>

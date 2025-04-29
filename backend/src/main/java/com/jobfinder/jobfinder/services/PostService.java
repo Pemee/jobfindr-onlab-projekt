@@ -1,5 +1,6 @@
 package com.jobfinder.jobfinder.services;
 
+import com.jobfinder.jobfinder.dto.PostApplicationView;
 import com.jobfinder.jobfinder.models.Post;
 import com.jobfinder.jobfinder.repositories.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,5 +60,9 @@ public class PostService {
     }
     public List<String> getAllCountries() {
         return postRepository.findAllCountries();
+    }
+
+    public List<PostApplicationView> getApplicationsForCompany(String cname) {
+        return postRepository.findApplicationViewsByCompanyName(cname);
     }
 }

@@ -120,24 +120,24 @@ def generate_questions(pdf_id: str) -> dict:
             persist_directory=CHROMA_DIR
         )
         retriever = vector_store.as_retriever()
-        llm = ChatOllama(model="mistral", temperature=0.7)
+        llm = ChatOllama(model="mistral", temperature=0)
 
         prompt = PromptTemplate.from_template(
             """You are a helpful assistant. Given the following context, generate 5 multiple-choice questions with 4 possible answers. 
 
             - Each question should have one correct answer and three incorrect answers.
             - The correct answer should ALWAYS be placed first, followed by the 3 incorrect answers.
-            - Do NOT write explicitly if an answer is correct just be the first answer correct.
+            - Do NOT write explicitly in the answer if it is correct just make it be the first answer.
             - Always end the question part with question mark.
             - Provide the questions and answers in the following format:
 
-    Question 1: What is the title of the cloud infrastructure provisioned for exclusive use by a single organization?
+    Question 1: <Question here>
     - <correct Answer >
     - <Answer 1>
     - <Answer 2>
     - <Answer 3>
 
-    Question 2: [Question here]
+    Question 2: <Question here>
     - <correct Answer >
     - <Answer 1>
     - <Answer 2>
@@ -154,7 +154,7 @@ Context:
         chain = create_retrieval_chain(retriever, question_answer_chain)
 
         result = chain.invoke({
-            "input": "Generate 5 questions with only 4 answer options to each one question and the response must follow the given format!"
+            "input": "Generate 5 questions from the context with only 4 answer options to each one question and the response must follow the given format!"
         })
 
         raw_text = result['answer']

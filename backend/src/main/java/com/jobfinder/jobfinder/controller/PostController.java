@@ -1,5 +1,6 @@
 package com.jobfinder.jobfinder.controller;
 
+import com.jobfinder.jobfinder.dto.PostApplicationView;
 import com.jobfinder.jobfinder.models.Post;
 import com.jobfinder.jobfinder.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +34,8 @@ public class PostController {
         }
     }
 
-    @GetMapping("/getPostById")
-    public Optional<Post> getPost(@RequestParam long id){
+    @GetMapping("/{id}")
+    public Optional<Post> getPost(@PathVariable long id){
         return postService.getPostById(id);
     }
 
@@ -51,4 +52,9 @@ public class PostController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong!");
     }
+    @GetMapping("/applications/{cname}")
+    public List<PostApplicationView> getApplications(@PathVariable String cname) {
+        return postService.getApplicationsForCompany(cname);
+    }
+
 }

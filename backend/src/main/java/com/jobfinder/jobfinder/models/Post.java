@@ -1,10 +1,7 @@
 package com.jobfinder.jobfinder.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Post {
@@ -16,17 +13,9 @@ public class Post {
     private String description;
     private String country;
     private String company_name;
+    @Column(columnDefinition = "TEXT")
     private String details;
 
-    public String getPdf_title() {
-        return pdf_title;
-    }
-
-    public void setPdf_title(String pdf_title) {
-        this.pdf_title = pdf_title;
-    }
-
-    private String pdf_title;
 
     public String getDetails() {
         return details;
