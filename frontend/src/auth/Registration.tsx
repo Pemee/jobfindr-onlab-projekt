@@ -66,9 +66,9 @@ export default function Registration() {
       }
 
   }
-    const handleSubmit = async (e:any) => {
+    async function handleSubmit(e:any){
         e.preventDefault();
-
+        setError('')
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
             return;
@@ -78,7 +78,7 @@ export default function Registration() {
         }else{
           formData.role="USER";
         }
-        setError('')
+        
         try {
             const response = await fetch("http://localhost:8081/register", {
                 method: "POST",
@@ -89,8 +89,11 @@ export default function Registration() {
               });
 
             if(response.status === 201) {
+              
               handleLogin(e);
-            } else {
+            } 
+
+            else {
                 const errorText = await response.text();
                 setError(errorText)
             }
@@ -173,7 +176,6 @@ export default function Registration() {
             name="registerAsCompany"
             checked={role}
             onChange={handleRoleChange}
-            required
             sx={{ m: 1 }}
           />
         }

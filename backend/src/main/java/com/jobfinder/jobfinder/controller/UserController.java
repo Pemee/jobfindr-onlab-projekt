@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,31 +29,24 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user){
-        userService.registerUser(user);
+        if(userService.userAlreadyRegistered(user.getUsername(), user.getEmail())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username or email already registered");
+        }
         keycloakAdminService.createUser(user.getUsername(),user.getEmail(),user.getPassword(), user.getFirstname(),user.getLastname(), user.getRole());
+
+        BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
+        String hashPass = bcrypt.encode(user.getPassword());
+        user.setPassword(hashPass);
+        userService.registerUser(user);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully!");
 
-    }
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user, HttpSession session) {
-        try{
-            boolean isAuthenticated = userService.authenticate(user.getUsername(),user.getPassword());
-
-            if (isAuthenticated){
-                session.setAttribute("user", user.getUsername());
-                return ResponseEntity.ok("Login was successful!");
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
     }
 
     @PutMapping("/updateUser")
     public ResponseEntity<String> updateUser(@RequestBody User user){
         String response = userService.updateUser(user);
-        if (response == "ok"){
+        if (response.equals("ok")){
             return ResponseEntity.status(HttpStatus.OK).body("User successfully updated!");
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Something went wrong!");

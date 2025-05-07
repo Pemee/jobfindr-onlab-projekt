@@ -33,22 +33,7 @@ public class UserService{
         userRepository.save(user);
         return "User registered successfully!";
     }
-    public boolean authenticate(String username, String password) {
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if(optionalUser.isEmpty()){
-            throw new IllegalArgumentException("user not found");
-        }
-        User user = optionalUser.get();
-        if(!user.getUsername().equals(username)){
-            throw new UsernameNotFoundException("User does not exist in the database");
-        }
 
-        if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
-            throw  new BadCredentialsException("The password is incorrect");
-        }
-
-        return  true;
-    }
     @Transactional
     public String updateUser(User user){
         Optional<User> optionalUser = userRepository.findByUsername(user.getUsername());
@@ -76,6 +61,12 @@ public class UserService{
             return null;
         }
         return optionalUser.get();
+    }
+
+    public boolean userAlreadyRegistered(String username, String email){
+        Optional<User> optionalUser1 = userRepository.findByUsername(username);
+        Optional<User> optionalUser2 = userRepository.findByEmail(email);
+        return (optionalUser1.isPresent() || optionalUser2.isPresent());
     }
 
 }
