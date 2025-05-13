@@ -4,6 +4,7 @@ import { Button, Card, CardActions, CardContent, Typography } from "@mui/materia
 import LanguageIcon from '@mui/icons-material/Language';
 import BusinessIcon from '@mui/icons-material/Business';
 import PostType from "../PostType";
+import { ResponsiveAppBar } from "../components/ResponsiveAppBar";
 
 
 export default function Post(){
@@ -23,8 +24,8 @@ export default function Post(){
     if (!post) {
         return <p>No post data found!</p>;
     }
-    return <div class="form-container">
-     
+    return <div><ResponsiveAppBar/>
+        <div class="form-container">
         <Card sx={{ minWidth: 275,width:"100%", margin: 1, boxShadow: 5}}>
       <CardContent>
         <Typography variant="h5" component="div" sx={{fontWeight: 'bold'}}>{post.title}</Typography>
@@ -40,8 +41,9 @@ export default function Post(){
       </CardContent>
       <CardActions>
       <Button size="medium" onClick={openPdf}>Learn Material</Button>
-        <Button size="medium" onClick={()=>{handleApplyClick(post.id, { id: post.id, title: post.title, description: post.description, country:post.country, company_name: post.company_name, details:post.details})}}>Apply</Button>
+        <Button size="medium" onClick={()=>{handleApplyClick(post.id, { id: post.id, title: post.title, description: post.description, country:post.country, company_name: post.company_name, details:post.details, tags:post.tags})}}>Apply</Button>
       </CardActions>
     </Card>
+    </div>
     </div>
 }

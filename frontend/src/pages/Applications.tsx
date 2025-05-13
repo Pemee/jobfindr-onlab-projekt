@@ -5,7 +5,6 @@ import {
     AccordionDetails,
     Typography,
     Box,
-    dividerClasses
   } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ResponsiveAppBar } from "../components/ResponsiveAppBar";
@@ -21,8 +20,8 @@ interface ResponseFormat{
 }
 export default function Application(){
     const [applications, SetApplications] = useState<ResponseFormat[]>()
+    const [company_name, SetcompanyName] = useState("Bosch kft.")
 
-    const company_name = "Bosch kft.";
     async function getApplications(){
         try{
             const response = await fetch(`http://localhost:8081/post/applications/${company_name}`);

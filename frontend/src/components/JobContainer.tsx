@@ -10,23 +10,32 @@ interface Post {
     country: string;
     company_name: string;
     details: string;
+    tags:string;
 }
 export default function JobContainer() {
     const [jobs, setJobs] = useState<Post[]>([]);
     const [search, setSearch] = useState("");
+    const [tags, setTags] = useState("");
     const [selectedCountry, setSelectedCountry] = useState("");
     const [selectedCompany, setSelectedCompany] = useState("");
     
     const filteredJobs = jobs.filter(job =>
         (job.title?.toLowerCase()?.includes(search.toLowerCase()) || 
          job.description?.toLowerCase()?.includes(search.toLowerCase()) || 
-         job.details?.toLowerCase()?.includes(search.toLowerCase())) 
-        &&
+         job.details?.toLowerCase()?.includes(search.toLowerCase())) &&
         (selectedCountry === "" || job.country === selectedCountry) &&
-        (selectedCompany === "" || job.company_name === selectedCompany)
+        (selectedCompany === "" || job.company_name === selectedCompany)&&
+        (hasMatchingTag(job,tags) || tags === "")
     );
         
+    function hasMatchingTag(item: Post, input: string): boolean {
+        const inputTags = input
+          .split(/[\s,]+/)
+          .map(tag => tag.trim())
+          .filter(tag => tag.length > 0);
 
+        return inputTags.some(inputTag => item.tags.includes(inputTag));
+      }
     async function getAllPosts(): Promise<Post[]> {
         try {
             const response = await fetch("http://localhost:8081/post/getAllPosts");
@@ -58,6 +67,14 @@ export default function JobContainer() {
                     variant="outlined"
                     value={search}
                     onChange={(event) =>{setSearch((event.target as HTMLInputElement).value)}}
+                    sx={{ mb: 2 }}
+                />
+                <TextField
+                    fullWidth
+                    label="Tags"
+                    variant="outlined"
+                    value={tags}
+                    onChange={(event) =>{setTags((event.target as HTMLInputElement).value)}}
                     sx={{ mb: 2 }}
                 />
                 <TextField
@@ -98,6 +115,7 @@ export default function JobContainer() {
                             description={job.description} 
                             company={job.company_name}
                             details={job.details}
+                            tags={job.tags}
                         />
                     ))
                 ) : (

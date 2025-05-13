@@ -3,6 +3,8 @@ package com.jobfinder.jobfinder.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Post {
 
@@ -15,7 +17,16 @@ public class Post {
     private String company_name;
     @Column(columnDefinition = "TEXT")
     private String details;
+    @Column(columnDefinition = "TEXT")
+    private String tags;
 
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
 
     public String getDetails() {
         return details;

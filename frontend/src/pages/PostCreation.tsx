@@ -17,6 +17,7 @@ import {
     country: string;
     company_name: string;
     details: string;
+    tags:string;
 }
 export default function PostCreation() {
     const [file, setFile] = useState<File | null>(null);
@@ -26,7 +27,8 @@ export default function PostCreation() {
         description:'',
         country: '',
         company_name: '',
-        details: ''
+        details: '',
+        tags: ''
     })
     const [error, setError] = useState('')
     const [token, setToken] = useState<string | undefined>("")
@@ -165,9 +167,18 @@ export default function PostCreation() {
             <TextField
               label="Job Details"
               name="details"
-              multiline
               fullWidth
               value={formData.details}
+              onChange={handleChange}
+              required
+              sx={{m:1}}
+            />
+            <TextField
+              label="Job Tags"
+              name="tags"
+              multiline
+              fullWidth
+              value={formData.tags}
               onChange={handleChange}
               required
               sx={{m:1}}

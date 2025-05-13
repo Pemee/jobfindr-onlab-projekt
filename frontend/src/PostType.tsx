@@ -5,5 +5,6 @@ export type PostType = {
     country: string;
     company_name: string;
     details: string;
+    tags:string;
 }
 export default PostType;

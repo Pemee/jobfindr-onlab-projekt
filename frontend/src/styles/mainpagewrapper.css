@@ -2,3 +2,7 @@
     display: grid;
     grid-template-columns:1fr 2fr;
 }
+.mainWrap:first-child{
+    display:flex;
+    flex-direction: column;
+}
