@@ -51,7 +51,7 @@ async def upload_pdf(id: str = Form(...), pdf: UploadFile = File(...)):
 def get_questions(pdfId: str):
     try:
         qa = generate_questions(pdfId)
-        return JSONResponse(content=qa)  # Returns {"questions": [...], "answers": [...]}
+        return JSONResponse(content=qa) 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -78,34 +78,33 @@ def parse_questions_answers(text: str):
     questions = []
     answers = []
 
-    # Debugging: Print the raw text before parsing
+    
     print(f"Raw Text:\n{text}")
 
-    # Adjusted pattern to account for more flexible spaces and potential extra line breaks
-    # We now use \s* to allow for optional spaces or newlines after the "Question X:" part
+    
     pattern = re.compile(
-        r"Question \d+: (.*?)\n\s*- (.*?)\n\s*- (.*?)\n\s*- (.*?)\n\s*- (.*?)\s*(?=\n|$)",  # Non-greedy match until end of string
+        r"Question \d+: (.*?)\n\s*- (.*?)\n\s*- (.*?)\n\s*- (.*?)\n\s*- (.*?)\s*(?=\n|$)", 
         re.DOTALL
     )
 
     matches = pattern.findall(text)
 
-    # Debugging: print the matches found
+    
     print(f"Matches found: {len(matches)}")
     
     for match in matches:
-        question = match[0].strip()  # The question text
-        a1 = match[1].strip()  # Answer 1
-        a2 = match[2].strip()  # Answer 2
-        a3 = match[3].strip()  # Answer 3
-        a4 = match[4].strip()  # Answer 4
+        question = match[0].strip()  
+        a1 = match[1].strip()  
+        a2 = match[2].strip()  
+        a3 = match[3].strip()  
+        a4 = match[4].strip()  
 
-        # Ensure the answers are ordered correctly (assuming first answer is correct)
+        
         final_answers = [a1, a2, a3, a4]
         questions.append(question)
         answers.append(final_answers)
 
-    # Debugging: Print the final number of parsed questions and answers
+    
     print(f"Total questions parsed: {len(questions)}")
     
     return questions, answers
