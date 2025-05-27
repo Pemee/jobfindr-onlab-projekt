@@ -115,7 +115,7 @@ export default function MapComponent(){
         }
       }, [jobs, coordinates]);
     return <div class="main-container">
-        <APIProvider apiKey="AIzaSyAxK1oaQWDcSYXZ-IWKGYIe94syW_--wzI">
+        <APIProvider apiKey={process.env.API_KEY as string}>
             <div class="map-container">
                 <Map 
                 mapId={"92afac3d098e2f34"} 
